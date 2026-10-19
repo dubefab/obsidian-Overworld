@@ -1,0 +1,1366 @@
+/* Overworld — an 8-bit platformer look for Obsidian.
+   Original pixel shapes and a generic retro palette. No third-party sprites or logos.
+   Font: Press Start 2P (SIL OFL 1.1), latin subset embedded below. */
+
+/* @settings
+name: Overworld
+id: overworld
+settings:
+    -
+        id: ow-motion
+        title: Motion
+        description: Coin flash on jumps, pointer blink, task bump, button press
+        type: class-toggle
+        default: false
+    -
+        id: ow-table-plain-rows
+        title: Plain table rows
+        description: Turn off zebra striping
+        type: class-toggle
+        default: false
+    -
+        id: ow-table-header-text
+        title: Table headers in body font
+        type: class-toggle
+        default: false
+    -
+        id: ow-tab-text
+        title: Tab titles in body font
+        type: class-toggle
+        default: false
+    -
+        id: ow-hud-off
+        title: Hide HUD label
+        type: class-toggle
+        default: false
+    -
+        id: ow-folder-plain
+        title: Quiet folder tiles
+        description: Folder chevrons sit on a faint tile instead of a brick block
+        type: class-toggle
+        default: false
+    -
+        id: ow-flagpole
+        title: Flagpole at note end
+        description: Pixel flagpole and castle under the last line in reading view
+        type: class-toggle
+        default: false
+*/
+
+@font-face {
+  font-family: "Press Start 2P";
+  font-style: normal;
+  font-weight: 400;
+  src: url(data:font/woff2;base64,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) format("woff2");
+}
+
+/* ---------- Palette (on body so Style Settings can override) ---------- */
+body {
+  --ow-font: "Press Start 2P", ui-monospace, monospace;
+  --ow-ink: #000000;
+  --ow-cream: #fcfcfc;
+  --ow-gold: #fca044;
+  --ow-gold-hi: #fcd8a8;
+  --ow-brick: #c84c0c;
+  --ow-brick-dk: #7c2800;
+  --ow-used: #a05a20;
+  --ow-pipe: #00a800;
+  --ow-pipe-dk: #005800;
+  --ow-oneup: #80d010;
+  --ow-lava: #d82800;
+  --ow-px: 4px;
+}
+
+.theme-light {
+  --ow-sky: #9ebcf0;
+  --ow-pane: #fcfcfc;
+  --ow-pane-text: #1a1a2e;
+  --ow-pane-muted: #4a4a68;
+  --ow-chrome: #c84c0c;
+  --ow-chrome-text: #fcfcfc;
+  --ow-ground: #c84c0c;
+  --ow-ground-hi: #fca044;
+  --ow-accent: #0058f8;
+}
+
+.theme-dark {
+  --ow-sky: #000000;
+  --ow-pane: #0c1030;
+  --ow-pane-text: #f0f0ff;
+  --ow-pane-muted: #a8b0e0;
+  --ow-chrome: #0058f8;
+  --ow-chrome-text: #fcfcfc;
+  --ow-ground: #0058f8;
+  --ow-ground-hi: #3cbcfc;
+  --ow-accent: #3cbcfc;
+}
+
+/* ---------- Map onto Obsidian tokens ---------- */
+.theme-light,
+.theme-dark {
+  --background-primary: var(--ow-pane);
+  --background-primary-alt: var(--ow-pane);
+  --background-secondary: var(--ow-sky);
+  --background-secondary-alt: var(--ow-sky);
+  --background-modifier-border: var(--ow-ink);
+  --background-modifier-border-hover: var(--ow-ink);
+  --background-modifier-hover: rgba(252, 160, 68, 0.25);
+  --text-normal: var(--ow-pane-text);
+  --text-muted: var(--ow-pane-muted);
+  --text-faint: var(--ow-pane-muted);
+  --text-accent: var(--ow-accent);
+  --text-accent-hover: var(--ow-brick);
+  --interactive-accent: var(--ow-brick);
+  --interactive-accent-hover: var(--ow-brick-dk);
+  --text-on-accent: var(--ow-cream);
+  --radius-s: 0px;
+  --radius-m: 0px;
+  --radius-l: 0px;
+  --h1-font: var(--ow-font);
+  --h2-font: var(--ow-font);
+  --h3-font: var(--ow-font);
+  --h4-font: var(--ow-font);
+  --h5-font: var(--ow-font);
+  --h6-font: var(--ow-font);
+  --h1-size: 1.5em;
+  --h2-size: 1.25em;
+  --h3-size: 1.1em;
+  --h4-size: 1em;
+  --h5-size: 0.9em;
+  --h6-size: 0.85em;
+  --h1-line-height: 1.5;
+  --h2-line-height: 1.5;
+  --h3-line-height: 1.5;
+  --h1-weight: 400;
+  --h2-weight: 400;
+  --h3-weight: 400;
+  --h4-weight: 400;
+  --h5-weight: 400;
+  --h6-weight: 400;
+  --h1-color: var(--ow-brick);
+  --h2-color: var(--ow-pipe);
+  --h3-color: var(--ow-accent);
+  --h4-color: var(--ow-pane-text);
+  --h5-color: var(--ow-pane-text);
+  --h6-color: var(--ow-pane-muted);
+  --link-decoration: underline dotted;
+  --link-decoration-hover: underline solid;
+  --link-decoration-thickness: 2px;
+  --tag-radius: 0px;
+  --tag-background: var(--ow-gold);
+  --tag-background-hover: var(--ow-gold-hi);
+  --tag-color: var(--ow-ink);
+  --tag-color-hover: var(--ow-ink);
+  --tag-border-width: 0px;
+  --table-header-background: var(--ow-th-bg);
+  --table-header-background-hover: var(--ow-th-bg);
+  --table-header-color: var(--ow-cream);
+  --table-header-font: var(--ow-font);
+  --table-header-weight: 400;
+  --table-column-alt-background: transparent;
+  --table-row-alt-background: transparent;
+  --table-row-alt-background-hover: var(--ow-row-hover);
+  --table-row-background-hover: var(--ow-row-hover);
+  --table-border-width: 2px;
+  --table-border-color: var(--ow-grid);
+  --table-header-border-width: 0px;
+  --table-column-first-border-width: 0px;
+  --table-column-last-border-width: 0px;
+  --table-row-last-border-width: 0px;
+  --blockquote-border-color: var(--ow-pipe);
+  --blockquote-border-thickness: 4px;
+  --blockquote-background-color: transparent;
+}
+
+/* Heading hard shadow, like a title logo */
+.markdown-rendered h1,
+.markdown-source-view.mod-cm6 .cm-header-1,
+.inline-title {
+  text-shadow: 3px 3px 0 var(--ow-ink);
+}
+
+/* ---------- Pixel edge helper: stepped box-shadow, no images ---------- */
+.callout {
+  --ow-edge: var(--ow-ink);
+  --ow-card: var(--ow-brick);
+  --ow-card-text: var(--ow-cream);
+  --callout-color: 200, 76, 12;
+  background-color: var(--ow-card);
+  background-image:
+    linear-gradient(var(--ow-edge), var(--ow-edge)),
+    linear-gradient(var(--ow-edge), var(--ow-edge)),
+    linear-gradient(var(--ow-edge), var(--ow-edge)),
+    linear-gradient(var(--ow-edge), var(--ow-edge));
+  background-size: 4px 4px;
+  background-repeat: no-repeat;
+  background-position: 6px 6px, calc(100% - 6px) 6px, 6px calc(100% - 6px), calc(100% - 6px) calc(100% - 6px);
+  border: 0;
+  border-radius: 0;
+  margin: 12px 4px;
+  padding: 0;
+  color: var(--ow-card-text);
+  mix-blend-mode: normal;
+  box-shadow:
+    0 -4px 0 0 var(--ow-edge),
+    0 4px 0 0 var(--ow-edge),
+    -4px 0 0 0 var(--ow-edge),
+    4px 0 0 0 var(--ow-edge),
+    inset 0 -4px 0 0 rgba(0, 0, 0, 0.3),
+    inset 4px 4px 0 0 rgba(255, 255, 255, 0.28);
+}
+
+.callout-title {
+  padding: 16px 20px 8px;
+  color: var(--ow-card-text);
+  font-family: var(--ow-font);
+  font-size: 0.7em;
+  line-height: 1.6;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45);
+}
+
+.callout-title-inner {
+  font-weight: 400;
+  color: var(--ow-card-text);
+}
+
+.callout-icon {
+  color: var(--ow-card-text);
+}
+
+.callout-content {
+  padding: 4px 20px 16px;
+  color: var(--ow-card-text);
+  background: transparent;
+}
+
+.callout-content > :first-child {
+  margin-top: 0;
+}
+.callout-content > :last-child {
+  margin-bottom: 0;
+}
+
+.callout-content a,
+.callout-content strong {
+  color: inherit;
+}
+
+/* The black outline disappears on the dark pane, so flip it */
+.theme-dark .callout {
+  --ow-edge: var(--ow-cream);
+}
+
+/* Gold ? block */
+.callout[data-callout="tip"],
+.callout[data-callout="hint"],
+.callout[data-callout="important"] {
+  --ow-card: var(--ow-gold);
+  --ow-card-text: var(--ow-ink);
+  --callout-color: 252, 160, 68;
+  --callout-icon: lucide-circle-help;
+}
+.callout[data-callout="tip"] .callout-title,
+.callout[data-callout="hint"] .callout-title,
+.callout[data-callout="important"] .callout-title {
+  text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.45);
+}
+
+/* Lava red */
+.callout[data-callout="warning"],
+.callout[data-callout="caution"],
+.callout[data-callout="danger"],
+.callout[data-callout="error"],
+.callout[data-callout="bug"],
+.callout[data-callout="failure"],
+.callout[data-callout="fail"],
+.callout[data-callout="attention"],
+.callout[data-callout="missing"] {
+  --ow-card: var(--ow-lava);
+  --ow-card-text: var(--ow-cream);
+  --callout-color: 216, 40, 0;
+}
+
+/* 1-UP green */
+.callout[data-callout="success"],
+.callout[data-callout="check"],
+.callout[data-callout="done"] {
+  --ow-card: var(--ow-oneup);
+  --ow-card-text: var(--ow-ink);
+  --callout-color: 128, 208, 16;
+}
+.callout[data-callout="success"] .callout-title,
+.callout[data-callout="check"] .callout-title,
+.callout[data-callout="done"] .callout-title {
+  text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Pipe green */
+.callout[data-callout="note"],
+.callout[data-callout="info"],
+.callout[data-callout="abstract"],
+.callout[data-callout="summary"],
+.callout[data-callout="tldr"],
+.callout[data-callout="todo"] {
+  --ow-card: #007800;
+  --ow-card-text: var(--ow-cream);
+  --callout-color: 0, 168, 0;
+}
+
+/* Underground blue */
+.callout[data-callout="question"],
+.callout[data-callout="help"],
+.callout[data-callout="faq"],
+.callout[data-callout="example"] {
+  --ow-card: #0058f8;
+  --ow-card-text: var(--ow-cream);
+  --callout-color: 0, 88, 248;
+}
+
+/* Used-block brown */
+.callout[data-callout="quote"],
+.callout[data-callout="cite"] {
+  --ow-card: var(--ow-used);
+  --ow-card-text: var(--ow-cream);
+  --callout-color: 160, 90, 32;
+}
+
+/* Nested callouts keep a flat look inside the parent */
+.callout .callout {
+  margin: 12px 4px;
+}
+
+/* ---------- Checkboxes: ? block, then used block ---------- */
+input[type="checkbox"],
+.markdown-rendered input[type="checkbox"],
+.HyperMD-task-line input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin-inline-end: 8px;
+  border: 0;
+  border-radius: 0;
+  background-color: var(--ow-gold);
+  box-shadow:
+    0 -2px 0 0 var(--ow-ink),
+    0 2px 0 0 var(--ow-ink),
+    -2px 0 0 0 var(--ow-ink),
+    2px 0 0 0 var(--ow-ink),
+    inset 0 -3px 0 0 rgba(0, 0, 0, 0.3),
+    inset 3px 3px 0 0 var(--ow-gold-hi);
+  cursor: pointer;
+}
+
+input[type="checkbox"]::after,
+.markdown-rendered input[type="checkbox"]::after,
+.HyperMD-task-line input[type="checkbox"]::after {
+  content: "?";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 0 0 2px;
+  background: none;
+  -webkit-mask-image: none;
+  mask-image: none;
+  color: var(--ow-cream);
+  font-family: var(--ow-font);
+  font-size: 10px;
+  line-height: 1;
+  text-shadow: 1px 1px 0 var(--ow-brick-dk);
+}
+
+input[type="checkbox"]:checked,
+.markdown-rendered input[type="checkbox"]:checked,
+.HyperMD-task-line input[type="checkbox"]:checked,
+input[type="checkbox"][data-task="x"],
+input[type="checkbox"][data-task="X"] {
+  background-color: var(--ow-used);
+  box-shadow:
+    0 -2px 0 0 var(--ow-ink),
+    0 2px 0 0 var(--ow-ink),
+    -2px 0 0 0 var(--ow-ink),
+    2px 0 0 0 var(--ow-ink),
+    inset 0 -3px 0 0 rgba(0, 0, 0, 0.35),
+    inset 3px 3px 0 0 rgba(255, 255, 255, 0.18);
+}
+
+input[type="checkbox"]:checked::after,
+.markdown-rendered input[type="checkbox"]:checked::after,
+.HyperMD-task-line input[type="checkbox"]:checked::after,
+input[type="checkbox"][data-task="x"]::after,
+input[type="checkbox"][data-task="X"]::after {
+  content: "";
+  inset: 0;
+  background-image:
+    linear-gradient(var(--ow-ink), var(--ow-ink)),
+    linear-gradient(var(--ow-ink), var(--ow-ink)),
+    linear-gradient(var(--ow-ink), var(--ow-ink)),
+    linear-gradient(var(--ow-ink), var(--ow-ink));
+  background-size: 3px 3px;
+  background-repeat: no-repeat;
+  background-position: 3px 3px, calc(100% - 3px) 3px, 3px calc(100% - 3px), calc(100% - 3px) calc(100% - 3px);
+}
+
+.task-list-item.is-checked,
+.markdown-source-view.mod-cm6 .HyperMD-task-line[data-task="x"],
+.markdown-source-view.mod-cm6 .HyperMD-task-line[data-task="X"] {
+  color: var(--ow-pane-muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+/* ---------- Horizontal rule: ground tiles ---------- */
+.markdown-rendered hr,
+.markdown-source-view.mod-cm6 .cm-hr,
+.cm-s-obsidian hr {
+  height: 16px;
+  margin: 24px 0;
+  border: 0;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 14px, var(--ow-ink) 14px 16px),
+    linear-gradient(var(--ow-ground-hi) 0 4px, var(--ow-ground) 4px 100%);
+}
+
+/* ---------- Tags as coins ---------- */
+a.tag,
+.cm-s-obsidian span.cm-hashtag {
+  padding: 2px 8px;
+  font-family: var(--ow-font);
+  font-size: 0.6em;
+  box-shadow:
+    0 -2px 0 0 var(--ow-ink),
+    0 2px 0 0 var(--ow-ink),
+    -2px 0 0 0 var(--ow-ink),
+    2px 0 0 0 var(--ow-ink);
+}
+
+/* ---------- Status bar as HUD ---------- */
+.status-bar {
+  background-color: var(--ow-ink);
+  border: 0;
+  border-top: 4px solid var(--ow-ground);
+  color: var(--ow-cream);
+  font-family: var(--ow-font);
+  font-size: 9px;
+  text-transform: uppercase;
+}
+.status-bar .status-bar-item,
+.status-bar .status-bar-item span {
+  color: var(--ow-cream);
+}
+.status-bar::before {
+  content: "WORLD 1-1";
+  margin-inline-end: auto;
+  padding-inline: 8px;
+  color: var(--ow-gold);
+}
+
+/* ---------- Scrollbar: pipe ---------- */
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ow-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ow-pipe);
+  border: 2px solid var(--ow-ink);
+  border-radius: 0;
+  box-shadow: inset 4px 0 0 0 var(--ow-oneup), inset -4px 0 0 0 var(--ow-pipe-dk);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ow-oneup);
+}
+
+/* ---------- Chrome: sidebar active row (tabs moved to B5) ---------- */
+.nav-file-title.is-active,
+.tree-item-self.is-active {
+  background-color: var(--ow-brick);
+  color: var(--ow-cream);
+  border-radius: 0;
+}
+
+/* ---------- Code: square ---------- */
+.markdown-rendered pre,
+.markdown-rendered code,
+.cm-s-obsidian .HyperMD-codeblock {
+  border-radius: 0;
+}
+
+/* ================= v0.2 tokens (body level) ================= */
+body {
+  --ow-mortar: rgba(0, 0, 0, 0.22);
+  --ow-ptr: var(--ow-gold-hi);
+  --ow-ptr-x: 8px;
+  --ow-th-text: var(--ow-cream);
+  --ow-msg: #101020;
+  /* Standing pipe, 14px column left of the box: ink | shade | body | highlight | ink */
+  --ow-pipe-col:
+    -2px 0 0 0 var(--ow-ink),
+    -6px 0 0 0 var(--ow-pipe-dk),
+    -10px 0 0 0 var(--ow-pipe),
+    -12px 0 0 0 var(--ow-oneup),
+    -14px 0 0 0 var(--ow-ink);
+  /* Pipe rim, 18x10, 2px wider than the column on each side */
+  --ow-pipe-rim: linear-gradient(90deg,
+    var(--ow-ink) 0 2px, var(--ow-oneup) 2px 5px, var(--ow-pipe) 5px 11px,
+    var(--ow-pipe-dk) 11px 16px, var(--ow-ink) 16px 18px);
+}
+.theme-light {
+  --ow-frame: #7c2800;
+  --ow-frame-ui: #000000;
+  --ow-th-bg: #c84c0c;
+  --ow-zebra: rgba(252, 160, 68, 0.12);
+  --ow-row-hover: rgba(252, 160, 68, 0.24);
+  --ow-grid: rgba(124, 40, 0, 0.22);
+  --ow-panel: #fcf3ea;
+  --ow-side-text: #202048;
+  --ow-guide: rgba(26, 26, 46, 0.30);
+  --ow-code-chip: #f7eae4;
+  --ow-code-chip-text: #7c2800;
+  --ow-code-edge: #000000;
+  --ow-marker: #c84c0c;
+  --ow-label: #7c2800;
+  --text-highlight-bg-rgb: 252, 216, 168;
+  --text-highlight-bg: #fcd8a8;
+  --text-selection: rgba(92, 148, 252, 0.30);
+  --caret-color: var(--ow-brick);
+  --link-unresolved-color: var(--ow-used);
+  --link-unresolved-opacity: 1;
+  --link-unresolved-decoration-style: dotted;
+  --link-unresolved-decoration-color: var(--ow-used);
+  --ow-cloud: var(--ow-cream);
+  --interactive-normal: #fcfcfc;
+  --interactive-hover: #fcd8a8;
+  --canvas-dot-pattern: rgba(26, 26, 46, 0.18);
+  --graph-node: #4a4a68;
+  --graph-node-focused: #c84c0c;
+  --graph-node-tag: #00a800;
+  --graph-node-attachment: #fca044;
+  --graph-node-unresolved: rgba(74, 74, 104, 0.5);
+  --graph-line: rgba(26, 26, 46, 0.25);
+}
+.theme-dark {
+  --ow-frame: #0058f8;
+  --ow-frame-ui: #a8b0e0;
+  --ow-th-bg: #0058f8;
+  --ow-zebra: rgba(60, 188, 252, 0.08);
+  --ow-row-hover: rgba(252, 160, 68, 0.16);
+  --ow-grid: rgba(168, 176, 224, 0.20);
+  --ow-panel: #141a40;
+  --ow-side-text: #a8b0e0;
+  --ow-guide: rgba(168, 176, 224, 0.28);
+  --ow-code-chip: #3a1c14;
+  --ow-code-chip-text: #fcd8a8;
+  --ow-code-edge: #0058f8;
+  --ow-marker: #fca044;
+  --ow-label: #fca044;
+  --text-highlight-bg-rgb: 252, 160, 68;
+  --text-highlight-bg: rgba(252, 160, 68, 0.30);
+  --text-selection: rgba(60, 188, 252, 0.28);
+  --caret-color: var(--ow-gold);
+  --link-unresolved-color: var(--ow-gold);
+  --link-unresolved-opacity: 1;
+  --link-unresolved-decoration-style: dotted;
+  --link-unresolved-decoration-color: var(--ow-used);
+  --ow-cloud: var(--ow-grid);
+  --interactive-normal: #1c2250;
+  --interactive-hover: #2a3270;
+  --canvas-dot-pattern: rgba(168, 176, 224, 0.18);
+  --graph-node: #a8b0e0;
+  --graph-node-focused: #fca044;
+  --graph-node-tag: #80d010;
+  --graph-node-attachment: #3cbcfc;
+  --graph-node-unresolved: rgba(168, 176, 224, 0.45);
+  --graph-line: rgba(168, 176, 224, 0.25);
+}
+.theme-light,
+.theme-dark {
+  --ow-edge2: 0 -2px 0 0 var(--ow-frame-ui), 0 2px 0 0 var(--ow-frame-ui), -2px 0 0 0 var(--ow-frame-ui), 2px 0 0 0 var(--ow-frame-ui);
+  --ow-edge4: 0 -4px 0 0 var(--ow-frame-ui), 0 4px 0 0 var(--ow-frame-ui), -4px 0 0 0 var(--ow-frame-ui), 4px 0 0 0 var(--ow-frame-ui);
+  --titlebar-background: var(--ow-chrome);
+  --titlebar-background-focused: var(--ow-chrome);
+  --tab-curve: 0px;
+  --tab-radius-active: 0px;
+  --tab-outline-width: 0px;
+  --modal-border-width: 0px;
+  --prompt-border-width: 0px;
+  --input-radius: 0px;
+  --background-modifier-border-focus: var(--ow-gold);
+  --background-modifier-message: var(--ow-msg);
+  --input-shadow: var(--ow-edge2), inset 0 -3px 0 0 rgba(0, 0, 0, 0.25), inset 2px 2px 0 0 rgba(255, 255, 255, 0.35);
+  --input-shadow-hover: var(--ow-edge2), inset 0 -3px 0 0 rgba(0, 0, 0, 0.25), inset 2px 2px 0 0 rgba(255, 255, 255, 0.55);
+  --toggle-radius: 0px;
+  --toggle-thumb-radius: 0px;
+  --toggle-thumb-color: var(--ow-gold);
+  --toggle-border-width: 3px;
+  --toggle-s-border-width: 3px;
+  --slider-thumb-radius: 0px;
+  --slider-thumb-border-width: 2px;
+  --slider-thumb-border-color: var(--ow-frame-ui);
+  --slider-thumb-height: 16px;
+  --slider-thumb-width: 16px;
+  --slider-thumb-y: -5px;
+  --slider-track-background: var(--ow-ground);
+  --slider-track-height: 6px;
+  --list-bullet-radius: 0;
+  --list-bullet-size: 0.38em;
+  --list-marker-color: var(--ow-marker);
+  --list-marker-color-hover: var(--ow-marker);
+  --list-marker-color-collapsed: var(--ow-pipe);
+  --collapse-icon-color: var(--ow-marker);
+  --collapse-icon-color-collapsed: var(--ow-pipe);
+  --code-background: #101020;
+  --code-normal: #fcfcfc;
+  --code-comment: #8890b8;
+  --code-function: #fca044;
+  --code-important: #fc7460;
+  --code-keyword: #3cbcfc;
+  --code-operator: #fc7460;
+  --code-property: #3cbcfc;
+  --code-punctuation: #a8b0e0;
+  --code-string: #80d010;
+  --code-tag: #fc7460;
+  --code-value: #d8a0fc;
+  --code-radius: 0px;
+  --embed-border-start: 4px solid var(--ow-accent);
+  --metadata-background: var(--ow-panel);
+  --metadata-padding: 12px 12px 8px;
+  --metadata-label-font: var(--ow-font);
+  --metadata-label-font-size: 8px;
+  --metadata-label-text-color: var(--ow-label);
+  --metadata-label-text-color-hover: var(--ow-label);
+  --metadata-property-radius: 0px;
+  --metadata-property-radius-hover: 0px;
+  --metadata-property-radius-focus: 0px;
+  --metadata-property-box-shadow-hover: 0 0 0 2px var(--ow-gold);
+  --metadata-property-box-shadow-focus: 0 0 0 2px var(--ow-gold);
+  --setting-items-background: var(--ow-panel);
+  --canvas-color-1: 216, 40, 0;
+  --canvas-color-2: 200, 76, 12;
+  --canvas-color-3: 252, 160, 68;
+  --canvas-color-4: 0, 168, 0;
+  --canvas-color-5: 60, 188, 252;
+  --canvas-color-6: 0, 88, 248;
+  --bases-table-header-background: var(--ow-th-bg);
+  --bases-table-header-background-hover: var(--ow-th-bg);
+  --bases-table-header-color: var(--ow-cream);
+  --bases-table-border-color: var(--ow-grid);
+  --bases-table-container-border-radius: 0px;
+  --bases-cards-radius: 0px;
+  --bases-cards-shadow: 0 0 0 2px var(--ow-frame);
+  --bases-cards-shadow-hover: 0 0 0 2px var(--ow-gold);
+}
+/* Gold focus ring is 1.9:1 on cream, so light mode uses brick */
+.theme-light {
+  --background-modifier-border-focus: var(--ow-brick);
+}
+
+/* ================= Tables: ground-block header, framed, zebra ================= */
+:is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) table {
+  border-collapse: collapse;
+  margin-inline: 4px;
+  box-shadow: 0 -4px 0 0 var(--ow-frame), 0 4px 0 0 var(--ow-frame), -4px 0 0 0 var(--ow-frame), 4px 0 0 0 var(--ow-frame);
+}
+:is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) :is(th, td) {
+  border: 2px solid var(--ow-grid);
+}
+:is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) thead th { border-top-width: 0; }
+:is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) tbody tr:last-child > td { border-bottom-width: 0; }
+:is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) tr > :is(th, td):first-child { border-inline-start-width: 0; }
+:is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) tr > :is(th, td):last-child { border-inline-end-width: 0; }
+
+:is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) thead tr,
+:is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) thead tr:hover {
+  background-color: var(--ow-th-bg);
+}
+:is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) thead th {
+  background-color: transparent;
+  color: var(--ow-th-text);
+  font-family: var(--ow-font);
+  font-size: 0.65em;
+  font-weight: 400;
+  line-height: 1.6;
+  text-transform: uppercase;
+  vertical-align: bottom;
+  box-shadow: inset 0 3px 0 0 rgba(255, 255, 255, 0.22), inset 0 -4px 0 0 rgba(0, 0, 0, 0.30);
+}
+:is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) thead th :is(strong, a) { color: inherit; }
+
+:is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) tbody tr,
+:is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) tbody tr:nth-child(odd),
+:is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) tbody tr > td:nth-child(2n+2) {
+  background-color: transparent;
+}
+:is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) tbody tr:nth-child(even) {
+  background-color: var(--ow-zebra);
+}
+@media (hover: hover) {
+  :is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) tbody tr:hover {
+    background-color: var(--ow-row-hover);
+  }
+}
+
+/* Inside callouts: darken instead of tint, follow the card's text color */
+.callout {
+  --ow-th-bg: rgba(0, 0, 0, 0.28);
+  --ow-th-text: var(--ow-card-text);
+  --ow-zebra: rgba(0, 0, 0, 0.12);
+  --ow-row-hover: rgba(0, 0, 0, 0.20);
+  --ow-grid: rgba(0, 0, 0, 0.25);
+  --ow-frame: var(--ow-edge);
+}
+
+/* Callout legibility: every accent color inside a card follows the card's text color,
+   so links, headings, bullets and marks never fall back to the pane's cyan, orange or gold */
+.callout {
+  --ow-card-mark: rgba(0, 0, 0, 0.30);
+  --text-normal: var(--ow-card-text);
+  --text-muted: var(--ow-card-text);
+  --text-faint: var(--ow-card-text);
+  --text-accent: var(--ow-card-text);
+  --text-accent-hover: var(--ow-card-text);
+  --link-color: var(--ow-card-text);
+  --link-color-hover: var(--ow-card-text);
+  --link-external-color: var(--ow-card-text);
+  --link-external-color-hover: var(--ow-card-text);
+  --link-unresolved-color: var(--ow-card-text);
+  --link-unresolved-decoration-style: dashed;
+  --h1-color: var(--ow-card-text);
+  --h2-color: var(--ow-card-text);
+  --h3-color: var(--ow-card-text);
+  --h4-color: var(--ow-card-text);
+  --h5-color: var(--ow-card-text);
+  --h6-color: var(--ow-card-text);
+  --list-marker-color: var(--ow-card-text);
+  --list-marker-color-hover: var(--ow-card-text);
+  --list-marker-color-collapsed: var(--ow-card-text);
+  --collapse-icon-color: var(--ow-card-text);
+  --text-highlight-bg: var(--ow-card-mark);
+  --tag-background: var(--ow-card-mark);
+  --tag-background-hover: var(--ow-card-mark);
+  --tag-color: var(--ow-card-text);
+  --tag-color-hover: var(--ow-card-text);
+}
+.callout:is([data-callout="tip"], [data-callout="hint"], [data-callout="important"],
+  [data-callout="success"], [data-callout="check"], [data-callout="done"]) {
+  --ow-card-mark: rgba(255, 255, 255, 0.50);
+}
+.callout :is(.markdown-rendered :not(pre) > code, .cm-s-obsidian span.cm-inline-code:not(.cm-hmd-indented-code)),
+.callout .markdown-rendered :not(pre) > code,
+.callout .cm-s-obsidian span.cm-inline-code:not(.cm-hmd-indented-code) {
+  --code-background: var(--ow-card-mark);
+  --code-normal: var(--ow-card-text);
+}
+/* Native highlight uses --text-highlight-bg-rgb at full strength, so paint the mark directly */
+.callout :is(mark, .cm-highlight, .cm-formatting-highlight) {
+  background-color: var(--ow-card-mark);
+  color: var(--ow-card-text);
+}
+.callout .is-unresolved {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+}
+
+body.ow-table-plain-rows,
+body.ow-table-plain-rows .callout { --ow-zebra: transparent; }
+body.ow-table-header-text :is(.markdown-rendered, .markdown-source-view.mod-cm6 .cm-table-widget) thead th {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: var(--font-semibold);
+  text-transform: none;
+}
+
+/* ================= Highlights: coin-gold marker ================= */
+.markdown-rendered mark,
+.cm-s-obsidian span.cm-highlight,
+.cm-s-obsidian span.cm-formatting-highlight {
+  border-radius: 0;
+  box-shadow: inset 0 -2px 0 0 var(--ow-gold);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.markdown-rendered mark { padding: 0 2px; }
+
+.cm-s-obsidian span.obsidian-search-match-highlight,
+.markdown-rendered .search-highlight > div {
+  border-radius: 0;
+  box-shadow: 0 0 0 2px var(--ow-gold);
+}
+.markdown-rendered .search-highlight > div.is-active {
+  box-shadow: 0 0 0 3px var(--ow-brick);
+}
+
+.markdown-source-view.mod-cm6 .cm-cursor,
+.markdown-source-view.mod-cm6 .cm-dropCursor {
+  border-left-width: 3px;
+  margin-left: -1px;
+}
+
+/* ================= Tab strip: brick row, lit active tab ================= */
+.workspace-tab-header-container {
+  --icon-color: var(--ow-chrome-text);
+  --icon-color-hover: var(--ow-chrome-text);
+  --tab-text-color: var(--ow-chrome-text);
+  --tab-text-color-focused: var(--ow-chrome-text);
+  --tab-text-color-focused-highlighted: var(--ow-chrome-text);
+  background-color: var(--ow-chrome);
+  background-image:
+    linear-gradient(90deg, var(--ow-mortar) 0 2px, transparent 2px),
+    linear-gradient(90deg, var(--ow-mortar) 0 2px, transparent 2px),
+    linear-gradient(var(--ow-mortar) 0 2px, transparent 2px);
+  background-size: 32px 20px, 32px 20px, 100% 20px;
+  background-position: 0 0, 16px 20px, 0 0;
+  background-repeat: repeat-x, repeat-x, repeat;
+  box-shadow: inset 0 -4px 0 0 rgba(0, 0, 0, 0.35);
+}
+.workspace-tab-header-inner-title {
+  font-family: var(--ow-font);
+  font-size: 8px;
+  line-height: 1.5;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.45);
+}
+.workspace-tab-header-container .workspace-tab-header.is-active {
+  --icon-color: var(--ow-pane-text);
+  --icon-color-hover: var(--ow-pane-text);
+  --tab-text-color-active: var(--ow-pane-text);
+  --tab-text-color-focused-active: var(--ow-pane-text);
+  --tab-text-color-focused-active-current: var(--ow-pane-text);
+  background-color: var(--ow-pane);
+  box-shadow: inset 0 4px 0 0 var(--ow-gold);
+}
+.workspace-tab-header.is-active .workspace-tab-header-inner-title { text-shadow: none; }
+body.ow-tab-text .workspace-tab-header-inner-title {
+  font-family: inherit;
+  font-size: var(--tab-font-size);
+  text-shadow: none;
+}
+
+/* Sidebar icon tabs: active = lit ? block */
+.workspace-split:is(.mod-left-split, .mod-right-split) .workspace-tab-header-container .workspace-tab-header.is-active,
+.workspace-split:is(.mod-left-split, .mod-right-split) .workspace-tab-header-container .workspace-tab-header.is-active:hover {
+  --icon-color: var(--ow-ink);
+  --icon-color-hover: var(--ow-ink);
+  --icon-color-focused: var(--ow-ink);
+  --icon-color-active: var(--ow-ink);
+  background-color: var(--ow-gold);
+  box-shadow: 0 -2px 0 0 var(--ow-ink), 0 2px 0 0 var(--ow-ink), -2px 0 0 0 var(--ow-ink), 2px 0 0 0 var(--ow-ink),
+    inset 0 -3px 0 0 rgba(0, 0, 0, 0.3), inset 3px 3px 0 0 var(--ow-gold-hi);
+}
+
+/* Ribbon: unqualified so it works with mod-left (pre-1.14) and mod-primary (1.14) */
+.workspace-ribbon {
+  --icon-color: var(--ow-side-text);
+  --icon-color-hover: var(--text-normal);
+}
+
+/* ================= Sidebars: contrast fix, menu-cursor rows ================= */
+.workspace-split:is(.mod-left-split, .mod-right-split) {
+  --text-muted: var(--ow-side-text);
+  --text-faint: var(--ow-side-text);
+  --nav-item-color: var(--ow-side-text);
+  --icon-color: var(--ow-side-text);
+  --nav-collapse-icon-color: var(--ow-side-text);
+  --nav-collapse-icon-color-collapsed: var(--ow-side-text);
+  --nav-indentation-guide-color: var(--ow-guide);
+  --nav-indentation-guide-width: 2px;
+  --nav-item-background-active: var(--ow-brick);
+  --nav-item-color-active: var(--ow-cream);
+  --nav-item-background-selected: rgba(252, 160, 68, 0.35);
+}
+.nav-file-title.is-active,
+.tree-item-self.is-active { --icon-color: var(--ow-cream); }
+
+/* Pixel pointer: 3 stepped columns, right-pointing */
+.tree-item-self.is-active:not(.mod-collapsible),
+body:not(.is-phone) .vertical-tab-nav-item.is-active,
+.suggestion-item.is-selected {
+  background-image:
+    linear-gradient(var(--ow-ptr), var(--ow-ptr)),
+    linear-gradient(var(--ow-ptr), var(--ow-ptr)),
+    linear-gradient(var(--ow-ptr), var(--ow-ptr));
+  background-size: 2px 10px, 2px 6px, 2px 2px;
+  background-position: var(--ow-ptr-x) 50%, calc(var(--ow-ptr-x) + 2px) 50%, calc(var(--ow-ptr-x) + 4px) 50%;
+  background-repeat: no-repeat;
+}
+
+/* Counts as coins */
+.tree-item-flair {
+  padding: 2px 4px;
+  border-radius: 0;
+  background-color: var(--ow-gold);
+  color: var(--ow-ink);
+  font-family: var(--ow-font);
+  font-size: 8px;
+  line-height: 1;
+}
+.search-result-file-matches {
+  border-radius: 0;
+  box-shadow: 0 0 0 2px var(--ow-frame);
+}
+
+/* ================= File explorer: brick folder blocks, file pips, ground footer ================= */
+.theme-light {
+  --ow-tile-quiet: rgba(32, 32, 72, 0.16);
+  --ow-file-pip: rgba(32, 32, 72, 0.40);
+  --ow-ptr-ghost: rgba(32, 32, 72, 0.55);
+}
+.theme-dark {
+  --ow-tile-quiet: rgba(168, 176, 224, 0.16);
+  --ow-file-pip: rgba(168, 176, 224, 0.40);
+  --ow-ptr-ghost: rgba(168, 176, 224, 0.55);
+}
+
+/* Folders: 14px block behind the chevron, bevel top and bottom */
+.nav-files-container .nav-folder-title .collapse-icon {
+  --nav-collapse-icon-color: var(--ow-cream);
+  --nav-collapse-icon-color-collapsed: var(--ow-cream);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.28) 0 2px, transparent 2px 12px, rgba(0, 0, 0, 0.3) 12px),
+    linear-gradient(var(--ow-ground), var(--ow-ground));
+  background-size: 14px 14px;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+body.ow-folder-plain .nav-files-container .nav-folder-title .collapse-icon {
+  --nav-collapse-icon-color: var(--ow-side-text);
+  --nav-collapse-icon-color-collapsed: var(--ow-side-text);
+  background-image: linear-gradient(var(--ow-tile-quiet), var(--ow-tile-quiet));
+}
+
+/* Files: 4px pip in the pointer column. The active row keeps the pointer */
+.nav-files-container .nav-file-title:not(.is-active) {
+  background-image: linear-gradient(var(--ow-file-pip), var(--ow-file-pip));
+  background-size: 4px 4px;
+  background-position: calc(var(--ow-ptr-x) + 2px) 50%;
+  background-repeat: no-repeat;
+}
+/* Hover: ghost pointer, same shape as the active one */
+@media (hover: hover) {
+  body:not(.is-grabbing) .nav-files-container .nav-file-title:not(.is-active):hover {
+    background-image:
+      linear-gradient(var(--ow-ptr-ghost), var(--ow-ptr-ghost)),
+      linear-gradient(var(--ow-ptr-ghost), var(--ow-ptr-ghost)),
+      linear-gradient(var(--ow-ptr-ghost), var(--ow-ptr-ghost));
+    background-size: 2px 10px, 2px 6px, 2px 2px;
+    background-position: var(--ow-ptr-x) 50%, calc(var(--ow-ptr-x) + 2px) 50%, calc(var(--ow-ptr-x) + 4px) 50%;
+  }
+}
+
+/* Vault footer: ground strip (variables only, native specificity stays put) */
+.workspace-sidedock-vault-profile {
+  --background-secondary: var(--ow-ground);
+  --background-modifier-hover: rgba(0, 0, 0, 0.18);
+  --vault-profile-color: var(--ow-cream);
+  --vault-profile-color-hover: var(--ow-cream);
+  --text-faint: var(--ow-gold-hi);
+  --text-muted: var(--ow-gold-hi);
+  --icon-color: var(--ow-cream);
+  --icon-color-hover: var(--ow-cream);
+  box-shadow: inset 0 4px 0 0 var(--ow-ground-hi);
+}
+
+/* ================= Title-card boxes: modal, palette, popovers, notices ================= */
+.modal,
+.prompt {
+  border-radius: 0;
+  box-shadow: var(--ow-edge4);
+}
+.modal-title {
+  font-family: var(--ow-font);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.modal-close-button:hover {
+  background-color: var(--ow-gold);
+  color: var(--ow-ink);
+  --icon-color: var(--ow-ink);
+}
+
+/* Settings: pause-menu list */
+.modal.mod-settings .vertical-tab-header {
+  background-color: var(--ow-panel);
+  border-inline-end: 2px solid var(--ow-frame-ui);
+}
+.vertical-tab-header-group-title {
+  color: var(--ow-label);
+  font-family: var(--ow-font);
+  font-size: 8px;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+.vertical-tab-nav-item {
+  --ow-ptr-x: 6px;
+  padding-inline-start: 20px;
+}
+body:not(.is-phone) .vertical-tab-nav-item.is-active {
+  --icon-color: var(--ow-cream);
+  background-color: var(--ow-brick);
+  color: var(--ow-cream);
+}
+.setting-item-heading .setting-item-name {
+  color: var(--ow-label);
+  font-family: var(--ow-font);
+  font-size: 8px;
+  text-transform: uppercase;
+}
+
+/* Command palette / quick switcher: ground strip under the input */
+input.prompt-input {
+  border-bottom: 0;
+  box-shadow: none;
+}
+.prompt-input-container {
+  padding-bottom: 8px;
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0 14px, var(--ow-ink) 14px 16px),
+    linear-gradient(var(--ow-ground-hi) 0 2px, var(--ow-ground) 2px 100%);
+  background-size: 100% 8px, 100% 8px;
+  background-position: left bottom, left bottom;
+  background-repeat: no-repeat;
+}
+.suggestion-item {
+  --ow-ptr-x: 6px;
+  padding-inline-start: 20px;
+  border-radius: 0;
+}
+.suggestion-item.is-selected {
+  --text-normal: var(--ow-cream);
+  --text-muted: var(--ow-cream);
+  --text-faint: var(--ow-cream);
+  --icon-color: var(--ow-cream);
+  background-color: var(--ow-brick);
+  color: var(--ow-cream);
+}
+.suggestion-highlight { color: var(--ow-label); }
+.suggestion-item.is-selected .suggestion-highlight {
+  color: inherit;
+  text-decoration: underline 2px;
+}
+
+/* Popovers, autocomplete (macOS context menus stay OS-drawn) */
+.popover.hover-popover,
+.suggestion-container,
+.cm-tooltip.cm-tooltip-autocomplete {
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--ow-edge2), 6px 6px 0 0 rgba(0, 0, 0, 0.18);
+}
+
+/* Message boxes */
+.notice {
+  border-radius: 0;
+  background-color: var(--ow-msg);
+  color: var(--ow-cream);
+  box-shadow: 0 -2px 0 0 var(--ow-cream), 0 2px 0 0 var(--ow-cream), -2px 0 0 0 var(--ow-cream), 2px 0 0 0 var(--ow-cream);
+}
+.tooltip {
+  border-radius: 0;
+  box-shadow: 0 -2px 0 0 var(--ow-ink), 0 2px 0 0 var(--ow-ink), -2px 0 0 0 var(--ow-ink), 2px 0 0 0 var(--ow-ink);
+}
+
+/* ================= Buttons, inputs, toggles, sliders ================= */
+button:not(.clickable-icon):active {
+  box-shadow: var(--ow-edge2), inset 0 3px 0 0 rgba(0, 0, 0, 0.3);
+}
+input[type='text'],
+input[type='search'],
+input[type='email'],
+input[type='password'],
+input[type='number'],
+textarea {
+  box-shadow: inset 2px 2px 0 0 rgba(0, 0, 0, 0.14);
+}
+
+/* Toggle: off = muted track, on = pipe; thumb = gold block */
+.checkbox-container,
+.checkbox-container:hover {
+  background-color: var(--ow-pane-muted);
+  box-shadow: var(--ow-edge2);
+}
+.checkbox-container.is-enabled,
+.checkbox-container.is-enabled:hover {
+  background-color: var(--ow-pipe);
+  box-shadow: var(--ow-edge2), inset 0 3px 0 0 var(--ow-oneup), inset 0 -3px 0 0 var(--ow-pipe-dk);
+}
+.checkbox-container::after {
+  box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.3), inset 2px 2px 0 0 var(--ow-gold-hi), 0 0 0 2px var(--ow-ink);
+}
+
+/* Slider: ground track, block thumb */
+input[type='range'] { border-radius: 0; }
+input[type='range']::-webkit-slider-thumb,
+input[type='range']::-webkit-slider-thumb:hover,
+input[type='range']::-webkit-slider-thumb:active {
+  background: var(--ow-gold);
+  box-shadow: inset 0 -3px 0 0 rgba(0, 0, 0, 0.3), inset 2px 2px 0 0 var(--ow-gold-hi);
+}
+
+/* ================= Code: underground panel, brick chip ================= */
+.markdown-rendered :not(pre) > code,
+.cm-s-obsidian span.cm-inline-code:not(.cm-hmd-indented-code) {
+  --code-background: var(--ow-code-chip);
+  --code-normal: var(--ow-code-chip-text);
+  box-shadow: inset 0 -2px 0 0 rgba(200, 76, 12, 0.35);
+}
+.markdown-rendered pre {
+  margin-inline: 4px;
+  box-shadow: 0 -4px 0 0 var(--ow-code-edge), 0 4px 0 0 var(--ow-code-edge), -4px 0 0 0 var(--ow-code-edge), 4px 0 0 0 var(--ow-code-edge);
+}
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock {
+  --text-faint: #8890b8;
+  --text-muted: #a8b0e0;
+}
+.markdown-rendered button.copy-code-button,
+.markdown-source-view.mod-cm6 .code-block-flair {
+  border-radius: 0;
+  color: #a8b0e0;
+  font-family: var(--ow-font);
+  font-size: 8px;
+  text-transform: uppercase;
+}
+
+/* ================= Blockquote: standing pipe =================
+   A vertical pipe hangs in the left margin with its rim beside the first line. No extra height.
+   The column is an outer box-shadow, so it sits outside the box: in Live Preview it avoids the
+   inline padding-inline-start/text-indent CM6 sets per line, and stacks across adjacent lines
+   (.cm-line padding 0, margin 0 !important) into one column. Nested quotes keep the native 4px rule. */
+.markdown-rendered blockquote {
+  position: relative;
+  border-inline-start: 0;
+  padding-inline-start: var(--size-4-3);
+  box-shadow: var(--ow-pipe-col);
+}
+.markdown-rendered blockquote::before,
+.markdown-source-view.mod-cm6.is-live-preview .cm-content > :not(.HyperMD-quote) + .HyperMD-quote::after,
+.markdown-source-view.mod-cm6.is-live-preview .cm-content > .HyperMD-quote:first-child::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline-start: -16px;
+  width: 18px;
+  height: 10px;
+  background-image: var(--ow-pipe-rim);
+  box-shadow: inset 0 2px 0 0 var(--ow-ink), inset 0 -2px 0 0 var(--ow-ink);
+  pointer-events: none;
+}
+/* Live Preview: every quote line carries a slice of the column; drop the native depth-1 rule */
+.markdown-source-view.mod-cm6.is-live-preview .HyperMD-quote {
+  box-shadow: var(--ow-pipe-col);
+}
+.markdown-source-view.mod-cm6.is-live-preview .HyperMD-quote::before {
+  content: none;
+}
+/* Nested quotes: plain 4px pipe-green rule, no second pipe */
+.markdown-rendered blockquote blockquote {
+  box-shadow: none;
+  border-inline-start: var(--blockquote-border-thickness) solid var(--blockquote-border-color);
+  padding-inline-start: var(--size-4-4);
+}
+.markdown-rendered blockquote blockquote::before { content: none; }
+
+/* ================= Coin bullets, square chevrons ================= */
+.list-bullet::after {
+  background-color: var(--ow-gold);
+  box-shadow: inset -1px -1px 0 0 var(--ow-brick), 0 0 0 1px var(--ow-ink);
+}
+li.is-collapsed .list-bullet::after,
+.is-collapsed ~ .cm-formatting-list .list-bullet::after {
+  background-color: var(--ow-pipe);
+  box-shadow: 0 0 0 1px var(--ow-ink), 0 0 0 4px var(--background-modifier-active-hover);
+}
+.collapse-icon svg.svg-icon,
+.collapse-indicator svg.svg-icon,
+.callout-fold svg.svg-icon {
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+/* ================= Task variants ================= */
+:is(.markdown-rendered li.task-list-item, .markdown-source-view.mod-cm6 .HyperMD-task-line):is([data-task="/"], [data-task=">"], [data-task="!"], [data-task="?"], [data-task="*"], [data-task="-"]) {
+  color: inherit;
+  text-decoration: none;
+}
+:is(.markdown-rendered li.task-list-item, .markdown-source-view.mod-cm6 .HyperMD-task-line)[data-task="-"] {
+  color: var(--ow-pane-muted);
+  text-decoration: line-through;
+}
+:is(.markdown-rendered li.task-list-item, .markdown-source-view.mod-cm6 .HyperMD-task-line):is([data-task="/"], [data-task=">"], [data-task="!"], [data-task="?"], [data-task="*"], [data-task="-"]) input[type="checkbox"]:checked::after {
+  content: "";
+  background-image: none;
+  color: var(--ow-cream);
+  font-family: var(--ow-font);
+  font-size: 10px;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+}
+:is(.markdown-rendered li.task-list-item, .markdown-source-view.mod-cm6 .HyperMD-task-line)[data-task="/"] input[type="checkbox"]:checked {
+  background: linear-gradient(var(--ow-gold) 50%, var(--ow-used) 50%);
+}
+:is(.markdown-rendered li.task-list-item, .markdown-source-view.mod-cm6 .HyperMD-task-line)[data-task="-"] input[type="checkbox"]:checked {
+  background-color: var(--ow-pane-muted);
+}
+:is(.markdown-rendered li.task-list-item, .markdown-source-view.mod-cm6 .HyperMD-task-line)[data-task="-"] input[type="checkbox"]:checked::after {
+  background: linear-gradient(var(--ow-ink), var(--ow-ink)) center / 10px 3px no-repeat;
+}
+:is(.markdown-rendered li.task-list-item, .markdown-source-view.mod-cm6 .HyperMD-task-line)[data-task=">"] input[type="checkbox"]:checked {
+  background-color: var(--ow-pipe);
+}
+:is(.markdown-rendered li.task-list-item, .markdown-source-view.mod-cm6 .HyperMD-task-line)[data-task=">"] input[type="checkbox"]:checked::after {
+  background-image: linear-gradient(var(--ow-cream), var(--ow-cream)), linear-gradient(var(--ow-cream), var(--ow-cream)), linear-gradient(var(--ow-cream), var(--ow-cream));
+  background-size: 2px 10px, 2px 6px, 2px 2px;
+  background-position: 7px 50%, 9px 50%, 11px 50%;
+  background-repeat: no-repeat;
+}
+:is(.markdown-rendered li.task-list-item, .markdown-source-view.mod-cm6 .HyperMD-task-line)[data-task="!"] input[type="checkbox"]:checked { background-color: var(--ow-lava); }
+:is(.markdown-rendered li.task-list-item, .markdown-source-view.mod-cm6 .HyperMD-task-line)[data-task="!"] input[type="checkbox"]:checked::after { content: "!"; }
+:is(.markdown-rendered li.task-list-item, .markdown-source-view.mod-cm6 .HyperMD-task-line)[data-task="?"] input[type="checkbox"]:checked { background-color: #0058f8; }
+:is(.markdown-rendered li.task-list-item, .markdown-source-view.mod-cm6 .HyperMD-task-line)[data-task="?"] input[type="checkbox"]:checked::after { content: "?"; }
+:is(.markdown-rendered li.task-list-item, .markdown-source-view.mod-cm6 .HyperMD-task-line)[data-task="*"] input[type="checkbox"]:checked { background-color: var(--ow-gold-hi); }
+:is(.markdown-rendered li.task-list-item, .markdown-source-view.mod-cm6 .HyperMD-task-line)[data-task="*"] input[type="checkbox"]:checked::after { content: "*"; color: var(--ow-brick); text-shadow: none; }
+
+/* ================= Footnotes as coins, properties as a status panel ================= */
+.footnote-ref .footnote-link {
+  display: inline-block;
+  padding: 1px 3px;
+  background-color: var(--ow-gold);
+  color: var(--ow-ink);
+  font-family: var(--ow-font);
+  font-size: 0.55em;
+  line-height: 1.4;
+  text-decoration: none;
+  box-shadow: 0 0 0 1px var(--ow-ink);
+}
+.footnote-backref { color: var(--ow-marker); }
+
+.metadata-container {
+  margin-inline: 2px;
+  box-shadow: 0 -2px 0 0 var(--ow-frame), 0 2px 0 0 var(--ow-frame), -2px 0 0 0 var(--ow-frame), 2px 0 0 0 var(--ow-frame);
+}
+.metadata-properties-title {
+  color: var(--ow-label);
+  font-family: var(--ow-font);
+  font-size: 8px;
+  text-transform: uppercase;
+}
+
+/* ================= HUD extras, coin progress bar ================= */
+.status-bar-item.mod-clickable:hover {
+  background-color: rgba(252, 160, 68, 0.25);
+  color: var(--ow-gold);
+}
+body.ow-hud-off .status-bar::before { content: none; }
+.progress-bar-indicator { border-radius: 0; }
+.progress-bar-line,
+.progress-bar-subline {
+  background-color: var(--ow-gold);
+  background-image: repeating-linear-gradient(90deg, transparent 0 12px, var(--ow-ink) 12px 16px);
+}
+
+/* ================= External links: pixel arrow ================= */
+/* Unresolved links are tokens in the .theme-light/.theme-dark blocks above, so .callout still wins */
+.markdown-rendered a.external-link {
+  padding-inline-end: 14px;
+  background-repeat: no-repeat;
+  background-size: 2px 8px, 2px 6px, 2px 4px, 2px 2px;
+  background-position:
+    calc(100% - 6px) 55%,
+    calc(100% - 4px) 55%,
+    calc(100% - 2px) 55%,
+    100% 55%;
+  background-image:
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor);
+}
+
+/* ================= Empty tab: overworld sky ================= */
+.workspace-leaf-content[data-type="empty"] {
+  background-color: var(--ow-sky);
+  background-repeat: no-repeat;
+  background-size:
+    16px 8px, 32px 8px, 48px 8px,
+    16px 8px, 32px 8px, 48px 8px,
+    32px 8px, 64px 8px, 96px 8px,
+    100% 16px;
+  background-position:
+    calc(18% + 16px) 14%, calc(18% + 8px) calc(14% + 8px), 18% calc(14% + 16px),
+    calc(72% + 16px) 26%, calc(72% + 8px) calc(26% + 8px), 72% calc(26% + 16px),
+    8% calc(100% - 40px), 8% calc(100% - 32px), 8% calc(100% - 24px),
+    0 100%;
+  background-image:
+    linear-gradient(var(--ow-cloud), var(--ow-cloud)), linear-gradient(var(--ow-cloud), var(--ow-cloud)), linear-gradient(var(--ow-cloud), var(--ow-cloud)),
+    linear-gradient(var(--ow-cloud), var(--ow-cloud)), linear-gradient(var(--ow-cloud), var(--ow-cloud)), linear-gradient(var(--ow-cloud), var(--ow-cloud)),
+    linear-gradient(var(--ow-pipe), var(--ow-pipe)), linear-gradient(var(--ow-pipe), var(--ow-pipe)), linear-gradient(var(--ow-pipe), var(--ow-pipe)),
+    linear-gradient(var(--ow-ground-hi) 0 4px, var(--ow-ground) 4px 100%);
+}
+.workspace-leaf-content[data-type="empty"] .view-content {
+  background-color: transparent;
+}
+.workspace-leaf-content[data-type="empty"] .empty-state {
+  padding-bottom: 32px;
+}
+
+/* ================= Flagpole: goal at the end of a note (reading view, off by default) ================= */
+body.ow-flagpole .markdown-reading-view .markdown-preview-sizer::after {
+  content: "";
+  display: block;
+  height: 112px;
+  margin-top: 32px;
+  background-repeat: no-repeat;
+  background-size:
+    100% 16px,
+    4px 80px, 8px 8px,
+    24px 4px, 20px 4px, 16px 4px, 12px 4px, 8px 4px,
+    12px 16px, 56px 32px, 8px 8px, 8px 8px, 8px 8px;
+  /* First layer paints on top: the door comes before the castle body it sits on */
+  background-position:
+    0 100%,
+    24px calc(100% - 16px), 22px calc(100% - 96px),
+    28px calc(100% - 88px), 28px calc(100% - 84px), 28px calc(100% - 80px), 28px calc(100% - 76px), 28px calc(100% - 72px),
+    calc(100% - 38px) calc(100% - 16px), calc(100% - 16px) calc(100% - 16px), calc(100% - 16px) calc(100% - 48px), calc(100% - 36px) calc(100% - 48px), calc(100% - 56px) calc(100% - 48px);
+  background-image:
+    linear-gradient(var(--ow-ground-hi) 0 4px, var(--ow-ground) 4px 100%),
+    linear-gradient(var(--ow-pane-text), var(--ow-pane-text)), linear-gradient(var(--ow-gold), var(--ow-gold)),
+    linear-gradient(var(--ow-pipe), var(--ow-pipe)), linear-gradient(var(--ow-pipe), var(--ow-pipe)), linear-gradient(var(--ow-pipe), var(--ow-pipe)), linear-gradient(var(--ow-pipe), var(--ow-pipe)), linear-gradient(var(--ow-pipe), var(--ow-pipe)),
+    linear-gradient(var(--ow-brick-dk), var(--ow-brick-dk)), linear-gradient(var(--ow-brick), var(--ow-brick)), linear-gradient(var(--ow-brick), var(--ow-brick)), linear-gradient(var(--ow-brick), var(--ow-brick)), linear-gradient(var(--ow-brick), var(--ow-brick));
+}
+
+/* ================= Motion (body.ow-motion only, off by default) ================= */
+@media (prefers-reduced-motion: no-preference) {
+  /* Native .is-flashing sets background-color !important, so the flash animates box-shadow */
+  body.ow-motion .is-flashing {
+    animation: ow-coin-flash 0.5s steps(1, end) 3;
+  }
+  @keyframes ow-coin-flash {
+    0%   { box-shadow: 0 0 0 2px var(--ow-gold); }
+    50%  { box-shadow: 0 0 0 2px var(--ow-brick); }
+  }
+  body.ow-motion :is(.tree-item-self.is-active:not(.mod-collapsible), .suggestion-item.is-selected, body:not(.is-phone) .vertical-tab-nav-item.is-active) {
+    animation: ow-ptr-bob 1s steps(1, end) infinite;
+  }
+  @keyframes ow-ptr-bob {
+    50% { background-position: calc(var(--ow-ptr-x) + 2px) 50%, calc(var(--ow-ptr-x) + 4px) 50%, calc(var(--ow-ptr-x) + 6px) 50%; }
+  }
+  body.ow-motion input[type="checkbox"]:checked:focus {
+    animation: ow-bump 0.2s steps(2, end) 1;
+  }
+  @keyframes ow-bump {
+    50% { translate: 0 -4px; }
+  }
+  body.ow-motion button:not(.clickable-icon):active { translate: 0 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.ow-motion .is-flashing,
+  body.ow-motion .tree-item-self,
+  body.ow-motion .suggestion-item,
+  body.ow-motion .vertical-tab-nav-item,
+  body.ow-motion input[type="checkbox"] { animation: none; }
+  body.ow-motion button:not(.clickable-icon):active { translate: none; }
+}
