@@ -48,6 +48,6 @@ To install by hand, put `theme.css` and `manifest.json` in `.obsidian/themes/Ove
 
 ## Credits
 
-Font: [Press Start 2P](https://github.com/codeman38/PressStart2P), SIL Open Font License 1.1, latin subset embedded in `theme.css`.
+Font: [Press Start 2P](https://github.com/codeman38/PressStart2P) by Cody Boisclair, SIL Open Font License 1.1, latin subset embedded in `theme.css`. The font license is in `FONT-LICENSE.txt`.
 
-Licensed under MIT. See `LICENSE`.
+The theme is licensed under MIT. See `LICENSE`.
